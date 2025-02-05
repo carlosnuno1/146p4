@@ -42,10 +42,14 @@ def op_craft_bench (state, ID):
 		return state
 	return False
 
-def op_wooden_axe_for_wood (state, ID):
-	return [('have_enough', ID, 'wooden_axe', 1), ('op_wooden_axe_for_wood', ID)]
+def op_wooden_axe_for_wood(state, ID):
+	if state.time[ID] >= 1 and state.wooden_axe[ID] >= 1:
+		state.wood[ID] += 4 
+		state.time[ID] -= 1
+		return state
+	return False
 
-pyhop.declare_operators (op_punch_for_wood, op_craft_wooden_axe_at_bench, op_craft_plank, op_craft_stick, op_craft_bench, op_wooden_axe_for_wood)
+pyhop.declare_operators(op_punch_for_wood, op_craft_wooden_axe_at_bench, op_craft_plank, op_craft_stick, op_craft_bench, op_wooden_axe_for_wood)  # Make sure it's an operator
 
 '''end operators'''
 
@@ -60,7 +64,6 @@ def produce (state, ID, item):
 	if item == 'wood': 
 		return [('produce_wood', ID)]
 	elif item == 'wooden_axe':
-		# this check to make sure we're not making multiple axes
 		if state.made_wooden_axe[ID] is True:
 			return False
 		else:
@@ -98,12 +101,11 @@ def craft_bench (state, ID):
 def wooden_axe_for_wood (state, ID):
 	return [('have_enough', ID, 'wooden_axe', 1), ('op_wooden_axe_for_wood', ID)]
 
-pyhop.declare_methods ('produce_wood', punch_for_wood)
+pyhop.declare_methods('produce_wood', wooden_axe_for_wood, punch_for_wood)
 pyhop.declare_methods ('produce_wooden_axe', craft_wooden_axe_at_bench)
 pyhop.declare_methods ('produce_plank', craft_plank)
 pyhop.declare_methods ('produce_stick', craft_stick)
 pyhop.declare_methods ('produce_bench', craft_bench)
-pyhop.declare_methods ('produce_wood', wooden_axe_for_wood)
 
 '''end recipe methods'''
 
@@ -124,7 +126,7 @@ pyhop.print_operators()
 pyhop.print_methods()
 
 # pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 1)], verbose=3)
-# pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 12)], verbose=3)
+pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 12)], verbose=3)
 
 # # Test wood gathering
 # pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 1)], verbose=3)
@@ -142,4 +144,4 @@ pyhop.print_methods()
 # pyhop.pyhop(state, [('have_enough', 'agent', 'wooden_axe', 1)], verbose=3)
 
 # Test the wood requirement
-pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 12)], verbose=3)
+# pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 12)], verbose=3)
