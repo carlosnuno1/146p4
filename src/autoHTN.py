@@ -17,9 +17,6 @@ def produce(state, ID, item):
 pyhop.declare_methods('produce', produce)
 
 def make_method(name, rule):
-    """
-    Create an HTN method for crafting.
-    """
     def method(state, ID):
         subtasks = []
 
@@ -137,14 +134,14 @@ if __name__ == '__main__':
 	with open(rules_filename) as f:
 		data = json.load(f)
 	
-	# # Test case #1
-	# state = set_up_state(data, 'agent', time=0)
-	# state.plank = {'agent': 1}
-	# goals = [('have_enough', 'agent', 'plank', 1)]
-	
-	# Test case #2
-	state = set_up_state(data, 'agent', time=300)
+	# Test case #1
+	state = set_up_state(data, 'agent', time=0)
+	state.plank = {'agent': 1}
 	goals = [('have_enough', 'agent', 'plank', 1)]
+	
+	# # Test case #2
+	# state = set_up_state(data, 'agent', time=300)
+	# goals = [('have_enough', 'agent', 'plank', 1)]
 	
 	# # Test case #3
 	# state = set_up_state(data, 'agent', time=10)
